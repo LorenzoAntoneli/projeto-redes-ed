@@ -1,0 +1,23 @@
+# Executáveis e Binários
+bin/
+build/
+*.exe
+*.o
+*.obj
+*.a
+*.lib
+
+# Arquivos temporários e dumps
+*.log
+*.tmp
+*.bak
+*.swp
+*~
+
+# IDEs e Editores
+.vscode/
+.idea/
+.vs/
+.gemini/
+Thumbs.db
+Desktop.ini

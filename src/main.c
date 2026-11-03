@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "registro.h"
 #include "util.h"
+#include "pilha.h"
+#include "ordenacao.h"
 
 static void exibir_menu(void) {
     printf("\n");
@@ -25,6 +27,8 @@ static void exibir_menu(void) {
 
 int main(void) {
     int opcao = -1;
+    Pilha historico;
+    pilha_inicializar(&historico);
 
     printf("========================================================\n");
     printf(" FATEC Ribeirao Preto - ADS 3o Semestre                 \n");
@@ -40,23 +44,24 @@ int main(void) {
 
         switch (opcao) {
             case 1:
-                printf("\n[Etapa 1 ativa] Modulo de cadastro sera integrado no Marco 5.\n");
+                printf("\n[Marco 2 ativo] Cadastro integrado (BST + Grafo) sera ativado no Marco 5.\n");
                 util_pausar();
                 break;
             case 2:
-                printf("\n[Etapa 1 ativa] Modulo BST sera implementado no Marco 3.\n");
+                printf("\n[Marco 2 ativo] Modulo BST sera implementado no Marco 3.\n");
                 util_pausar();
                 break;
             case 3:
-                printf("\n[Etapa 1 ativa] Remocao integrada sera concluida no Marco 5.\n");
+                printf("\n[Marco 2 ativo] Remocao integrada sera concluida no Marco 5.\n");
                 util_pausar();
                 break;
             case 4:
-                printf("\n[Etapa 1 ativa] Percurso em-ordem disponivel no Marco 3.\n");
+                printf("\n[Marco 2 ativo] Percurso em-ordem disponivel no Marco 3.\n");
                 util_pausar();
                 break;
             case 5:
-                printf("\n[Etapa 1 ativa] Algoritmo de ordenacao disponivel no Marco 2.\n");
+                exibir_equipamentos_ordenados(NULL, 0);
+                printf("[Marco 2 ativo] Merge Sort pronto; copia da BST sera integrada a partir do Marco 3.\n");
                 util_pausar();
                 break;
             case 6:
@@ -64,15 +69,16 @@ int main(void) {
             case 8:
             case 9:
             case 10:
-                printf("\n[Etapa 1 ativa] Modulo de Grafo/BFS disponivel no Marco 4.\n");
+                printf("\n[Marco 2 ativo] Modulo de Grafo/BFS disponivel no Marco 4.\n");
                 util_pausar();
                 break;
             case 11:
-                printf("\n[Etapa 1 ativa] Pilha de historico disponivel no Marco 2.\n");
+                pilha_exibir_ultimas_cinco(&historico);
                 util_pausar();
                 break;
             case 0:
                 printf("\nEncerrando o sistema com sucesso. Liberando recursos...\n");
+                pilha_liberar(&historico);
                 break;
             default:
                 printf("Opcao invalida!\n");

@@ -41,7 +41,7 @@ projeto-redes-ed/
 │   ├── lista.h         # TAD Lista Encadeada (ordem da BFS)
 │   ├── fila.h          # TAD Fila Encadeada (fila de BFS)
 │   ├── pilha.h         # TAD Pilha de Histórico (últimas ações)
-│   ├── ordenacao.h     # Algoritmo de ordenação (Merge/Quick Sort)
+│   ├── ordenacao.h     # Algoritmo de ordenação próprio (Merge Sort O(n log n))
 │   ├── bst.h           # TAD Árvore Binária de Busca (BST)
 │   └── grafo.h         # TAD Grafo Não Direcionado e BFS
 ├── src/

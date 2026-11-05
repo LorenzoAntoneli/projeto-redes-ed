@@ -2,23 +2,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static int validar_acao(AcaoHistorico *acao) {
-    if (!acao) return 0;
+static int validar_acao(const AcaoHistorico *acao) {
+    if (!acao || acao->id <= 0) {
+        return 0;
+    }
 
     switch (acao->tipo) {
         case ACAO_CADASTRAR_REGISTRO:
         case ACAO_REMOVER_REGISTRO:
-            if (acao->id1 <= 0) return 0;
-            acao->id2 = 0;
+        case ACAO_AGENDAR_MANUTENCAO:
+        case ACAO_ATENDER_MANUTENCAO:
             return 1;
-
-        case ACAO_ADICIONAR_CONEXAO:
-        case ACAO_REMOVER_CONEXAO:
-            if (acao->id1 <= 0 || acao->id2 <= 0 || acao->id1 == acao->id2) {
-                return 0;
-            }
-            return 1;
-
         default:
             return 0;
     }
@@ -42,11 +36,10 @@ size_t pilha_tamanho(const Pilha *p) {
     return p->tamanho;
 }
 
-AcaoHistorico criar_acao_historico(TipoAcao tipo, int id1, int id2) {
+AcaoHistorico criar_acao_historico(TipoAcao tipo, int id) {
     AcaoHistorico acao;
     acao.tipo = tipo;
-    acao.id1 = id1;
-    acao.id2 = id2;
+    acao.id = id;
     return acao;
 }
 
@@ -56,10 +49,10 @@ const char *pilha_descricao_tipo(TipoAcao tipo) {
             return "Cadastro de Equipamento";
         case ACAO_REMOVER_REGISTRO:
             return "Remocao de Equipamento";
-        case ACAO_ADICIONAR_CONEXAO:
-            return "Adicao de Conexao";
-        case ACAO_REMOVER_CONEXAO:
-            return "Remocao de Conexao";
+        case ACAO_AGENDAR_MANUTENCAO:
+            return "Agendamento Manutencao";
+        case ACAO_ATENDER_MANUTENCAO:
+            return "Atendimento Manutencao";
         default:
             return "Operacao Desconhecida";
     }
@@ -82,8 +75,8 @@ int pilha_push(Pilha *p, AcaoHistorico acao) {
     return 1;
 }
 
-int pilha_registrar(Pilha *p, TipoAcao tipo, int id1, int id2) {
-    AcaoHistorico acao = criar_acao_historico(tipo, id1, id2);
+int pilha_registrar(Pilha *p, TipoAcao tipo, int id) {
+    AcaoHistorico acao = criar_acao_historico(tipo, id);
     return pilha_push(p, acao);
 }
 
@@ -147,17 +140,8 @@ void pilha_exibir_ultimas_cinco(const Pilha *p) {
     while (atual != NULL && exibidos < PILHA_LIMITE_EXIBICAO) {
         const AcaoHistorico *ac = &atual->acao;
         exibidos++;
-
-        if (ac->tipo == ACAO_CADASTRAR_REGISTRO || ac->tipo == ACAO_REMOVER_REGISTRO) {
-            printf("| #%u | %-25s | Equipamento ID: %-18d |\n",
-                   (unsigned)exibidos, pilha_descricao_tipo(ac->tipo), ac->id1);
-        } else {
-            char detalhe_ids[32];
-            sprintf(detalhe_ids, "%d <-> %d", ac->id1, ac->id2);
-            printf("| #%u | %-25s | Conexao IDs:    %-18s |\n",
-                   (unsigned)exibidos, pilha_descricao_tipo(ac->tipo), detalhe_ids);
-        }
-
+        printf("| #%u | %-25s | Equipamento ID: %-18d |\n",
+               (unsigned)exibidos, pilha_descricao_tipo(ac->tipo), ac->id);
         atual = atual->abaixo;
     }
 

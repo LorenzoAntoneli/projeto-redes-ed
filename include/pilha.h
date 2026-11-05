@@ -7,24 +7,23 @@
 
 /**
  * @brief Tipos de operações que alteram o estado do sistema (Seção 8 do regulamento).
- * Buscas, listagens, ordenação e consultas NÃO entram no histórico.
+ * Buscas, listagens, filtragens, ordenação e consultas NÃO entram no histórico.
  */
 typedef enum {
-    ACAO_CADASTRAR_REGISTRO = 1,
-    ACAO_REMOVER_REGISTRO   = 2,
-    ACAO_ADICIONAR_CONEXAO  = 3,
-    ACAO_REMOVER_CONEXAO    = 4
+    ACAO_CADASTRAR_REGISTRO  = 1,
+    ACAO_REMOVER_REGISTRO    = 2,
+    ACAO_AGENDAR_MANUTENCAO  = 3,
+    ACAO_ATENDER_MANUTENCAO  = 4
 } TipoAcao;
 
 /**
  * @brief Dados de uma operação registrada no histórico.
- *  - id1: ID do equipamento (cadastro/remoção) ou 1º equipamento da conexão.
- *  - id2: ID do 2º equipamento da conexão (0 quando a ação envolve apenas um equipamento).
+ *  - tipo: categoria da alteração de estado concluída com sucesso.
+ *  - id: identificador positivo do equipamento envolvido na operação.
  */
 typedef struct {
     TipoAcao tipo;
-    int id1;
-    int id2;
+    int id;
 } AcaoHistorico;
 
 /**
@@ -63,7 +62,7 @@ size_t pilha_tamanho(const Pilha *p);
 /**
  * @brief Monta uma estrutura AcaoHistorico com os parâmetros informados.
  */
-AcaoHistorico criar_acao_historico(TipoAcao tipo, int id1, int id2);
+AcaoHistorico criar_acao_historico(TipoAcao tipo, int id);
 
 /**
  * @brief Retorna uma descrição textual legível para o tipo de ação.
@@ -72,7 +71,7 @@ const char *pilha_descricao_tipo(TipoAcao tipo);
 
 /**
  * @brief Empilha (push) uma ação de alteração de estado concluída com sucesso.
- * Valida se o tipo de ação pertence ao conjunto permitido e se os IDs são positivos.
+ * Valida se o tipo de ação pertence ao conjunto permitido e se o ID é positivo.
  * @return 1 em caso de sucesso; 0 se a ação for inválida ou falhar alocação.
  */
 int pilha_push(Pilha *p, AcaoHistorico acao);
@@ -81,7 +80,7 @@ int pilha_push(Pilha *p, AcaoHistorico acao);
  * @brief Atalho conveniente para criar e empilhar uma ação diretamente.
  * @return 1 em caso de sucesso; 0 caso contrário.
  */
-int pilha_registrar(Pilha *p, TipoAcao tipo, int id1, int id2);
+int pilha_registrar(Pilha *p, TipoAcao tipo, int id);
 
 /**
  * @brief Desempilha (pop) a ação do topo da pilha, removendo-a.

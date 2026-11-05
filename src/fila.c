@@ -74,6 +74,70 @@ int fila_frente(const Fila *f, int *valor_saida) {
     return 1;
 }
 
+int fila_contem(const Fila *f, int valor) {
+    if (!f) return 0;
+
+    const NoFila *atual = f->frente;
+    while (atual != NULL) {
+        if (atual->valor == valor) {
+            return 1;
+        }
+        atual = atual->prox;
+    }
+    return 0;
+}
+
+int fila_obter_em(const Fila *f, size_t indice, int *valor_saida) {
+    if (!f || !valor_saida || indice >= f->tamanho) {
+        return 0;
+    }
+
+    const NoFila *atual = f->frente;
+    size_t pos = 0;
+    while (atual != NULL && pos < indice) {
+        atual = atual->prox;
+        pos++;
+    }
+
+    if (!atual) {
+        return 0;
+    }
+
+    *valor_saida = atual->valor;
+    return 1;
+}
+
+int fila_remover_valor(Fila *f, int valor) {
+    if (!f || f->frente == NULL) {
+        return 0;
+    }
+
+    NoFila *ant = NULL;
+    NoFila *atual = f->frente;
+
+    while (atual != NULL) {
+        if (atual->valor == valor) {
+            if (ant == NULL) {
+                f->frente = atual->prox;
+            } else {
+                ant->prox = atual->prox;
+            }
+
+            if (atual == f->tras) {
+                f->tras = ant;
+            }
+
+            free(atual);
+            f->tamanho--;
+            return 1;
+        }
+        ant = atual;
+        atual = atual->prox;
+    }
+
+    return 0;
+}
+
 void fila_liberar(Fila *f) {
     if (!f) return;
 

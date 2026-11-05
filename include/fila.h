@@ -13,8 +13,9 @@ typedef struct NoFila {
 
 /**
  * @brief Descritor da Fila Dinâmica Encadeada (Requisito R05).
- * Segue a política FIFO (First-In, First-Out) com operações O(1),
- * utilizada para controlar o processamento de vértices na travessia BFS.
+ * Segue a política FIFO (First-In, First-Out) com operações de inserção e
+ * remoção em O(1), utilizada para gerenciar a fila de manutenção técnica
+ * de equipamentos de rede.
  */
 typedef struct {
     NoFila *frente;
@@ -56,6 +57,25 @@ int fila_desenfileirar(Fila *f, int *valor_saida);
  * @return 1 se a fila não estiver vazia; 0 caso contrário.
  */
 int fila_frente(const Fila *f, int *valor_saida);
+
+/**
+ * @brief Verifica se um determinado valor já está presente na fila.
+ * @return 1 se encontrado; 0 caso contrário.
+ */
+int fila_contem(const Fila *f, int valor);
+
+/**
+ * @brief Consulta de forma não destrutiva o elemento na posição 'indice' (0 = frente).
+ * @return 1 se o índice for válido; 0 caso contrário.
+ */
+int fila_obter_em(const Fila *f, size_t indice, int *valor_saida);
+
+/**
+ * @brief Remove uma ocorrência específica da fila mantendo a ordem FIFO dos demais.
+ * Utilizado para preservar consistência caso um equipamento agendado seja excluído da BST.
+ * @return 1 se o valor foi localizado e removido; 0 caso contrário.
+ */
+int fila_remover_valor(Fila *f, int valor);
 
 /**
  * @brief Desaloca todos os nós remanescentes na fila e restaura o estado vazio.

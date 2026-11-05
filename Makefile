@@ -10,12 +10,15 @@ CORE_SRCS = $(SRC_DIR)/registro.c \
             $(SRC_DIR)/lista.c \
             $(SRC_DIR)/fila.c \
             $(SRC_DIR)/pilha.c \
-            $(SRC_DIR)/ordenacao.c
+            $(SRC_DIR)/ordenacao.c \
+            $(SRC_DIR)/bst.c
 
 TARGET = $(BIN_DIR)/sistema.exe
 TEST_MODELAGEM = $(BIN_DIR)/test_modelagem.exe
 TEST_LINEARES = $(BIN_DIR)/test_lineares.exe
 TEST_ORDENACAO = $(BIN_DIR)/test_ordenacao.exe
+TEST_BST = $(BIN_DIR)/test_bst.exe
+TEST_INTEGRACAO = $(BIN_DIR)/test_integracao.exe
 
 all: dirs $(TARGET)
 
@@ -25,13 +28,15 @@ dirs:
 $(TARGET): $(SRC_DIR)/main.c $(CORE_SRCS)
 	$(CC) $(CFLAGS) $^ -o $@
 
-test: dirs $(TEST_MODELAGEM) $(TEST_LINEARES) $(TEST_ORDENACAO)
+test: dirs $(TEST_MODELAGEM) $(TEST_LINEARES) $(TEST_ORDENACAO) $(TEST_BST) $(TEST_INTEGRACAO)
 	@echo ====================================
 	@echo Executando bateria de testes...
 	@echo ====================================
 	@./$(TEST_MODELAGEM)
 	@./$(TEST_LINEARES)
 	@./$(TEST_ORDENACAO)
+	@./$(TEST_BST)
+	@./$(TEST_INTEGRACAO)
 
 $(TEST_MODELAGEM): $(TEST_DIR)/test_modelagem.c $(SRC_DIR)/registro.c $(SRC_DIR)/util.c
 	$(CC) $(CFLAGS) $^ -o $@
@@ -40,6 +45,12 @@ $(TEST_LINEARES): $(TEST_DIR)/test_lineares.c $(SRC_DIR)/lista.c $(SRC_DIR)/fila
 	$(CC) $(CFLAGS) $^ -o $@
 
 $(TEST_ORDENACAO): $(TEST_DIR)/test_ordenacao.c $(SRC_DIR)/registro.c $(SRC_DIR)/ordenacao.c
+	$(CC) $(CFLAGS) $^ -o $@
+
+$(TEST_BST): $(TEST_DIR)/test_bst.c $(SRC_DIR)/registro.c $(SRC_DIR)/lista.c $(SRC_DIR)/bst.c
+	$(CC) $(CFLAGS) $^ -o $@
+
+$(TEST_INTEGRACAO): $(TEST_DIR)/test_integracao.c $(CORE_SRCS)
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:

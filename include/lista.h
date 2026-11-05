@@ -5,7 +5,7 @@
 
 /**
  * @brief Nó da lista simplesmente encadeada.
- * Armazena o identificador (ID) de um equipamento descoberto na travessia BFS.
+ * Armazena o identificador (ID) de um equipamento coletado em consultas ou percursos.
  */
 typedef struct NoLista {
     int id;
@@ -15,7 +15,7 @@ typedef struct NoLista {
 /**
  * @brief Descritor da Lista Encadeada Simples (Requisito R03).
  * Mantém ponteiros para o início e para o fim, garantindo inserção no final em O(1)
- * para preservar a ordem exata de descoberta da Busca em Largura (BFS).
+ * para preservar a sequência exata de coleta/filtragem de equipamentos na árvore.
  */
 typedef struct {
     NoLista *inicio;

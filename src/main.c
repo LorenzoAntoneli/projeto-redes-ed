@@ -17,7 +17,7 @@ static void exibir_menu(void) {
     printf(" 2  - Buscar equipamento por ID (BST)\n");
     printf(" 3  - Remover equipamento por ID (BST)\n");
     printf(" 4  - Listar equipamentos em ordem de ID (BST em-ordem)\n");
-    printf(" 5  - Consultar menor e maior ID cadastrados (BST)\n");
+    printf(" 5  - Consultar menor/maior ID e percursos da BST\n");
     printf(" 6  - Ordenar e exibir equipamentos por nome (Merge Sort)\n");
     printf(" 7  - Filtrar equipamentos por termo (Lista Encadeada)\n");
     printf(" 8  - Agendar equipamento para manutencao (Fila enqueue)\n");
@@ -117,7 +117,7 @@ static void operacao_remover(ArvoreBST *arvore, Fila *fila_manutencao, Pilha *hi
 }
 
 static void operacao_menor_maior(const ArvoreBST *arvore) {
-    printf("\n--- [5] Consultar Menor e Maior ID na BST ---\n");
+    printf("\n--- [5] Consultar Menor/Maior ID e Percursos da BST ---\n");
     Equipamento menor, maior;
 
     if (!bst_obter_menor(arvore, &menor) || !bst_obter_maior(arvore, &maior)) {
@@ -130,6 +130,28 @@ static void operacao_menor_maior(const ArvoreBST *arvore) {
 
     printf("\n[Maior ID cadastrado na extrema direita da BST]\n");
     exibir_equipamento_detalhado(&maior);
+
+    Lista l_em, l_pre, l_pos;
+    lista_inicializar(&l_em);
+    lista_inicializar(&l_pre);
+    lista_inicializar(&l_pos);
+
+    if (bst_coletar_ids_em_ordem(arvore, &l_em) &&
+        bst_coletar_ids_pre_ordem(arvore, &l_pre) &&
+        bst_coletar_ids_pos_ordem(arvore, &l_pos)) {
+        printf("\n[Resumo Estrutural e Percursos da Arvore (Total: %lu | Altura h = %d)]\n",
+               (unsigned long)bst_tamanho(arvore), bst_altura(arvore));
+        printf("  - Em-Ordem  (Esq -> Raiz -> Dir): ");
+        lista_exibir(&l_em);
+        printf("  - Pre-Ordem (Raiz -> Esq -> Dir): ");
+        lista_exibir(&l_pre);
+        printf("  - Pos-Ordem (Esq -> Dir -> Raiz): ");
+        lista_exibir(&l_pos);
+    }
+
+    lista_liberar(&l_em);
+    lista_liberar(&l_pre);
+    lista_liberar(&l_pos);
 }
 
 static void operacao_ordenar_por_nome(const ArvoreBST *arvore) {

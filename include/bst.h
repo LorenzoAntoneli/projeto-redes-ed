@@ -88,10 +88,34 @@ int bst_obter_maior(const ArvoreBST *arvore, Equipamento *saida);
 void bst_exibir_em_ordem(const ArvoreBST *arvore);
 
 /**
+ * @brief Exibe em formato tabular todos os equipamentos usando percurso pré-ordem
+ * (Raiz -> Subárvore Esquerda -> Subárvore Direita).
+ */
+void bst_exibir_pre_ordem(const ArvoreBST *arvore);
+
+/**
+ * @brief Exibe em formato tabular todos os equipamentos usando percurso pós-ordem
+ * (Subárvore Esquerda -> Subárvore Direita -> Raiz).
+ */
+void bst_exibir_pos_ordem(const ArvoreBST *arvore);
+
+/**
  * @brief Percorre a BST em-ordem e armazena os IDs na Lista Encadeada com inserção no fim O(1).
  * @return 1 em caso de sucesso; 0 em falha de alocação ou parâmetros inválidos.
  */
 int bst_coletar_ids_em_ordem(const ArvoreBST *arvore, Lista *destino);
+
+/**
+ * @brief Percorre a BST em pré-ordem e armazena os IDs na Lista Encadeada com inserção no fim O(1).
+ * @return 1 em caso de sucesso; 0 em falha de alocação ou parâmetros inválidos.
+ */
+int bst_coletar_ids_pre_ordem(const ArvoreBST *arvore, Lista *destino);
+
+/**
+ * @brief Percorre a BST em pós-ordem e armazena os IDs na Lista Encadeada com inserção no fim O(1).
+ * @return 1 em caso de sucesso; 0 em falha de alocação ou parâmetros inválidos.
+ */
+int bst_coletar_ids_pos_ordem(const ArvoreBST *arvore, Lista *destino);
 
 /**
  * @brief Filtra equipamentos cujo nome, tipo ou localização contenham 'termo'

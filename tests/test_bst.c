@@ -91,11 +91,29 @@ static void test_insercao_busca_percurso_extremos(void) {
     printf("  -> Menor ID esperado: 20 (obtido: %d) | Maior ID esperado: 80 (obtido: %d) -> OK\n",
            menor.id, maior.id);
 
-    /* Percurso em-ordem */
-    int esperado[] = {20, 30, 35, 40, 50, 60, 65, 70, 80};
-    validar_sequencia_em_ordem(&arv, esperado, 9);
+    /* Percursos em-ordem, pre-ordem e pos-ordem */
+    int esperado_em[]  = {20, 30, 35, 40, 50, 60, 65, 70, 80};
+    int esperado_pre[] = {50, 30, 20, 40, 35, 70, 60, 65, 80};
+    int esperado_pos[] = {20, 35, 40, 30, 65, 60, 80, 70, 50};
+
+    validar_sequencia_em_ordem(&arv, esperado_em, 9);
+
+    Lista l_pre, l_pos;
+    lista_inicializar(&l_pre);
+    lista_inicializar(&l_pos);
+    assert(bst_coletar_ids_pre_ordem(&arv, &l_pre) == 1 && lista_tamanho(&l_pre) == 9);
+    assert(bst_coletar_ids_pos_ordem(&arv, &l_pos) == 1 && lista_tamanho(&l_pos) == 9);
+
+    for (size_t i = 0; i < 9; i++) {
+        int id_pre = 0, id_pos = 0;
+        assert(lista_obter_em(&l_pre, i, &id_pre) == 1 && id_pre == esperado_pre[i]);
+        assert(lista_obter_em(&l_pos, i, &id_pos) == 1 && id_pos == esperado_pos[i]);
+    }
+    lista_liberar(&l_pre);
+    lista_liberar(&l_pos);
+
     bst_exibir_em_ordem(&arv);
-    printf("  -> Percurso em-ordem produziu sequencia estritamente crescente de 9 IDs -> OK\n");
+    printf("  -> Percursos Em-Ordem, Pre-Ordem e Pos-Ordem validados para os 9 IDs -> OK\n");
 
     bst_liberar(&arv);
 }

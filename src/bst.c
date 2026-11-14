@@ -102,6 +102,20 @@ static void exibir_em_ordem_recursivo(const NoBST *no) {
     exibir_em_ordem_recursivo(no->dir);
 }
 
+static void exibir_pre_ordem_recursivo(const NoBST *no) {
+    if (!no) return;
+    exibir_equipamento_linha(&no->dado);
+    exibir_pre_ordem_recursivo(no->esq);
+    exibir_pre_ordem_recursivo(no->dir);
+}
+
+static void exibir_pos_ordem_recursivo(const NoBST *no) {
+    if (!no) return;
+    exibir_pos_ordem_recursivo(no->esq);
+    exibir_pos_ordem_recursivo(no->dir);
+    exibir_equipamento_linha(&no->dado);
+}
+
 static int coletar_ids_recursivo(const NoBST *no, Lista *destino) {
     if (!no) return 1;
 
@@ -112,6 +126,36 @@ static int coletar_ids_recursivo(const NoBST *no, Lista *destino) {
         return 0;
     }
     if (!coletar_ids_recursivo(no->dir, destino)) {
+        return 0;
+    }
+    return 1;
+}
+
+static int coletar_ids_pre_ordem_recursivo(const NoBST *no, Lista *destino) {
+    if (!no) return 1;
+
+    if (!lista_inserir_fim(destino, no->dado.id)) {
+        return 0;
+    }
+    if (!coletar_ids_pre_ordem_recursivo(no->esq, destino)) {
+        return 0;
+    }
+    if (!coletar_ids_pre_ordem_recursivo(no->dir, destino)) {
+        return 0;
+    }
+    return 1;
+}
+
+static int coletar_ids_pos_ordem_recursivo(const NoBST *no, Lista *destino) {
+    if (!no) return 1;
+
+    if (!coletar_ids_pos_ordem_recursivo(no->esq, destino)) {
+        return 0;
+    }
+    if (!coletar_ids_pos_ordem_recursivo(no->dir, destino)) {
+        return 0;
+    }
+    if (!lista_inserir_fim(destino, no->dado.id)) {
         return 0;
     }
     return 1;
@@ -310,6 +354,32 @@ void bst_exibir_em_ordem(const ArvoreBST *arvore) {
     printf("+-------+--------------------------------+----------------------+----------------------+\n");
 }
 
+void bst_exibir_pre_ordem(const ArvoreBST *arvore) {
+    if (!arvore || bst_vazia(arvore)) {
+        printf("\n>> Nenhum equipamento cadastrado na arvore (BST vazia).\n");
+        return;
+    }
+
+    printf("\nPercurso Pre-Ordem da BST (Raiz -> Esquerda -> Direita | Total: %lu | Altura: %d):\n",
+           (unsigned long)arvore->tamanho, bst_altura(arvore));
+    exibir_cabecalho_equipamentos();
+    exibir_pre_ordem_recursivo(arvore->raiz);
+    printf("+-------+--------------------------------+----------------------+----------------------+\n");
+}
+
+void bst_exibir_pos_ordem(const ArvoreBST *arvore) {
+    if (!arvore || bst_vazia(arvore)) {
+        printf("\n>> Nenhum equipamento cadastrado na arvore (BST vazia).\n");
+        return;
+    }
+
+    printf("\nPercurso Pos-Ordem da BST (Esquerda -> Direita -> Raiz | Total: %lu | Altura: %d):\n",
+           (unsigned long)arvore->tamanho, bst_altura(arvore));
+    exibir_cabecalho_equipamentos();
+    exibir_pos_ordem_recursivo(arvore->raiz);
+    printf("+-------+--------------------------------+----------------------+----------------------+\n");
+}
+
 int bst_coletar_ids_em_ordem(const ArvoreBST *arvore, Lista *destino) {
     if (!arvore || !destino) {
         return 0;
@@ -319,6 +389,36 @@ int bst_coletar_ids_em_ordem(const ArvoreBST *arvore, Lista *destino) {
     lista_inicializar(destino);
 
     if (!coletar_ids_recursivo(arvore->raiz, destino)) {
+        lista_liberar(destino);
+        return 0;
+    }
+    return 1;
+}
+
+int bst_coletar_ids_pre_ordem(const ArvoreBST *arvore, Lista *destino) {
+    if (!arvore || !destino) {
+        return 0;
+    }
+
+    lista_liberar(destino);
+    lista_inicializar(destino);
+
+    if (!coletar_ids_pre_ordem_recursivo(arvore->raiz, destino)) {
+        lista_liberar(destino);
+        return 0;
+    }
+    return 1;
+}
+
+int bst_coletar_ids_pos_ordem(const ArvoreBST *arvore, Lista *destino) {
+    if (!arvore || !destino) {
+        return 0;
+    }
+
+    lista_liberar(destino);
+    lista_inicializar(destino);
+
+    if (!coletar_ids_pos_ordem_recursivo(arvore->raiz, destino)) {
         lista_liberar(destino);
         return 0;
     }
